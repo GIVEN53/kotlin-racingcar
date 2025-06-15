@@ -1,10 +1,12 @@
 package domain
 
+import io.kotest.matchers.shouldBe
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
+import support.FixedNumberGenerator
 
 class CarTest {
     @ParameterizedTest(name = "invalid name: \"{0}\"")
@@ -38,5 +40,32 @@ class CarTest {
 
         // then
         assertThat(car.name).isEqualTo(validName)
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = [4, 5])
+    fun `moves the car when the number generated is greater than or equal to 4`(generatedNumber: Int) {
+        // given
+        val car = Car("Car")
+        val numberGenerator = FixedNumberGenerator(generatedNumber)
+
+        // when
+        car.move(numberGenerator)
+
+        // then
+        car.position shouldBe 1
+    }
+
+    @Test
+    fun `does not move the car when the number generated is less than 4`() {
+        // given
+        val car = Car("Car")
+        val numberGenerator = FixedNumberGenerator(3)
+
+        // when
+        car.move(numberGenerator)
+
+        // then
+        car.position shouldBe 0
     }
 }

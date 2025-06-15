@@ -1,9 +1,12 @@
 package domain
 
+import numbergenerator.NumberGenerator
+
 class Car(
     val name: String,
 ) {
     var position: Int = 0
+        private set
 
     init {
         require(name.isNotBlank()) { "Car name cannot be blank" }
@@ -15,5 +18,12 @@ class Car(
     companion object {
         private const val MIN_NAME_LENGTH = 1
         private const val MAX_NAME_LENGTH = 5
+        private const val MOVE_THRESHOLD = 4
+    }
+
+    fun move(numberGenerator: NumberGenerator) {
+        if (numberGenerator.generate() >= MOVE_THRESHOLD) {
+            position++
+        }
     }
 }
