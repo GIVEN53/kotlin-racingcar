@@ -1,8 +1,7 @@
 package domain
 
+import io.kotest.assertions.throwables.shouldThrowExactly
 import io.kotest.matchers.shouldBe
-import org.assertj.core.api.Assertions.assertThat
-import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
@@ -13,9 +12,8 @@ class CarTest {
     @ValueSource(strings = ["", " "])
     fun `fails to create a car when name is blank`(invalidName: String) {
         // when & then
-        assertThatThrownBy { Car(invalidName) }
-            .isExactlyInstanceOf(IllegalArgumentException::class.java)
-            .hasMessageContaining("Car name cannot be blank")
+        shouldThrowExactly<IllegalArgumentException> { Car(invalidName) }
+            .message shouldBe "Car name cannot be blank"
     }
 
     @Test
@@ -24,9 +22,8 @@ class CarTest {
         val length = 6
 
         // when & then
-        assertThatThrownBy { Car("a".repeat(length)) }
-            .isExactlyInstanceOf(IllegalArgumentException::class.java)
-            .hasMessageContaining("Car name must be between 1 and 5 characters")
+        shouldThrowExactly<IllegalArgumentException> { Car("a".repeat(length)) }
+            .message shouldBe "Car name must be between 1 and 5 characters"
     }
 
     @ParameterizedTest
@@ -39,7 +36,7 @@ class CarTest {
         val car = Car(validName)
 
         // then
-        assertThat(car.name).isEqualTo(validName)
+        car.name shouldBe validName
     }
 
     @ParameterizedTest
