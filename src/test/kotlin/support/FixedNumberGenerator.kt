@@ -3,9 +3,12 @@ package support
 import numbergenerator.NumberGenerator
 
 class FixedNumberGenerator(
-    private val fixedNumber: Int,
+    private vararg val fixedNumbers: Int,
 ) : NumberGenerator {
+    private var index = 0
+
     override fun generate(): Int {
-        return fixedNumber
+        check(index < fixedNumbers.size) { "No more fixed numbers available" }
+        return fixedNumbers[index++]
     }
 }
